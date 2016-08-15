@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{book.title}}</title>
+  </head>
+  <body>
+    <a href="/">Home</a> |
+    <a href="/logout">Logout</a>
+    <h3>{{book.title}}</h3>
+    <p>
+      Author: {{book.author.name}}
+    </p>
+    <h4>Reviews:</h4>
+    {% for review in reviews%}
+    <p>
+      Rating:{{review.rating}}/5
+    </p>
+    <p>
+      <a href="/users/{{review.user.id}}">{{review.user.alias}}</a> says
+      {{review.review}}
+    </p>
+    <p>
+      Posted on: {{review.created_at}}
+    </p>
+    {% if review.user.id == request.session.user %}
+    <a href="/remove/{{review.id}}">Delete this review</a>
+    {%endif%}
+    {%endfor%}
+    <form class="" action="/newreview/{{book.id}}" method="post">
+      {%csrf_token%}
+      <h1>Add a review:</h1>
+      <textarea name="review" rows="8" cols="40"></textarea>
+      Rating:
+      <select class="" name="rating">
+        <option value='1'>1</option>
+        <option value='2'>2</option>
+        <option value='3'>3</option>
+        <option value='4'>4</option>
+        <option value='5'>5</option>
+      </select>
+      <input type="submit" name="Submit" value="Add review">
+    </form>
+    {%for message in messages%}
+    {{message}}
+    {%endfor%}
+  </body>
+</html>
